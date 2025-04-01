@@ -1,0 +1,18 @@
+Distributed Training (DT) Used in fields like NLP + CV is cornerstone of large-scale ML applications
+2 Kinds of compute nodes that help iteravely train ML models for better perfomance
+    Workers
+        Perform gradient computation locally -> send gradients to PS
+    Parameter Server
+        Once gradients received from workers, global aggregation and send results back
+As scale increases, gradient aggregation needs more communication resources => bottleneck
+    One DT task training DeepLight model: 79% time for communication alone 
+Fix for communication bottleneck:
+    Existing ones focus on scheduling or gradient compression
+    Communication scheduling
+        increases overlap bwtn computation and ntwrk transmission with fine-grained gradient transmission
+            sub models instead of whole model -> example
+            Workers reduce idle waiting time and fully use bandwidth
+            ByteScheduler
+            Can improve efficiency, but does not reduce total transmission amount
+                PS bottleneck can still exist 
+    
