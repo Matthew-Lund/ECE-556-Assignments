@@ -1,18 +1,63 @@
-Distributed Training (DT) Used in fields like NLP + CV is cornerstone of large-scale ML applications
-2 Kinds of compute nodes that help iteravely train ML models for better perfomance
-    Workers
-        Perform gradient computation locally -> send gradients to PS
-    Parameter Server
-        Once gradients received from workers, global aggregation and send results back
-As scale increases, gradient aggregation needs more communication resources => bottleneck
-    One DT task training DeepLight model: 79% time for communication alone 
-Fix for communication bottleneck:
-    Existing ones focus on scheduling or gradient compression
-    Communication scheduling
-        increases overlap bwtn computation and ntwrk transmission with fine-grained gradient transmission
-            sub models instead of whole model -> example
-            Workers reduce idle waiting time and fully use bandwidth
-            ByteScheduler
-            Can improve efficiency, but does not reduce total transmission amount
-                PS bottleneck can still exist 
-    
+Background Info:
+    Distributed Training (DT) Used in fields like NLP + CV is cornerstone of large-scale ML applications
+    2 Kinds of compute nodes that help iteravely train ML models for better perfomance
+        Workers
+            Perform gradient computation locally -> send gradients to PS
+        Parameter Server
+            Once gradients received from workers, global aggregation and send results back
+    As scale increases, gradient aggregation needs more communication resources => bottleneck
+        One DT task training DeepLight model: 79% time for communication alone 
+    Fixes for communication bottleneck:
+        Communication scheduling
+            increases overlap bwtn computation and ntwrk transmission with fine-grained gradient transmission
+                sub models instead of whole model -> example
+                Workers reduce idle waiting time and fully use bandwidth
+                ByteScheduler
+                Can improve efficiency, but does not reduce total transmission amount
+                    PS bottleneck can still exist 
+        Gradient Compression 
+            avoids bandwidth bottleneck via reducing volume of exchanged data
+                e.g: seinding only !=0 data blocks
+            issue: degrades traininig accuracy
+        In-Network Aggregation
+            Offload parts of gradient aggregation tasks into programmable hw to reduce # of forwarded traffic
+            After device aggregates gradients -> only aggregated gradient is transmitted into network 
+            example: SwitchML
+                P4-based switch for aggregating gradients of workers iniside rack to min. comm. cost
+            Mainly focus on realizing the aggregation operations, but not HOW to choose gradient routing
+                Necessary to design proper gradient routing 
+Main Topic introduced:
+    GRID 
+        Considers gradient routing w/ in-network aggregation in context of CLUSTERS
+        Gradient routing framework for In-Network Aggregation with control plane & data plane to mitigate bottleneck 
+
+Related Work
+    Distributed Training
+        DNN
+        SGD
+        PS
+    Communication Scheduling
+    In-Network Aggregation
+
+Motivation
+    Example
+    Intuition from Authors
+    GRID Overview
+    Workflow
+
+Control Plane Design
+    Network Model 
+    Problem Formulation
+    Algorithm Design 
+    Perfomance Analysis
+
+Data Plane Design
+    Gradient Aggregation
+    Rate Synchronization
+
+Perfomance Eval
+    Metrics & Benchmarks
+    Testbed Eval 
+    Simulation Eval 
+
+Conclusion
