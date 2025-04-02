@@ -33,9 +33,12 @@ Main Topic introduced:
 
 Related Work
     Distributed Training
-        DNN
-        SGD
-        PS
+        DNN -> Requires hundreds of iterations over dataset for convergence
+            Distributed Model training (parallelism schemes)
+                Model & Data parallelism
+                
+        SGD -> Stochastic gradient descent
+        PS -> Parameter Server ; gradient aggregation scheme
     Communication Scheduling
     In-Network Aggregation
 
